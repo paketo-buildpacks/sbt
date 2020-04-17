@@ -28,7 +28,7 @@ id = "org.cloudfoundry.stacks.cflinuxfs3"
 [[metadata.dependencies]]
 id      = "sbt"
 name    = "Scala SBT"
-version = "placeholder"
+version = "0.0.0"
 uri     = "placeholder"
 sha256  = "placeholder"
 stacks  = [ "io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3" ]
