@@ -28,9 +28,9 @@ id = "org.cloudfoundry.stacks.cflinuxfs3"
 [[metadata.dependencies]]
 id      = "sbt"
 name    = "Scala SBT"
-version = "0.0.0"
-uri     = "placeholder"
-sha256  = "placeholder"
+version = "1.3.10"
+uri     = "https://github.com/sbt/sbt/releases/download/v1.3.10/sbt-1.3.10.tgz"
+sha256  = "3060065764193651aa3fe860a17ff8ea9afc1e90a3f9570f0584f2d516c34380"
 stacks  = [ "io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3" ]
 
   [[metadata.dependencies.licenses]]
