@@ -16,5 +16,14 @@
 
 package main
 
+import (
+	"os"
+
+	"github.com/paketo-buildpacks/libpak"
+	"github.com/paketo-buildpacks/libpak/bard"
+	"github.com/paketo-buildpacks/sbt/sbt"
+)
+
 func main() {
+	libpak.Build(sbt.Build{Logger: bard.NewLogger(os.Stdout)})
 }

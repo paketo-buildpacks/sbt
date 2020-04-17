@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package main
+package sbt_test
 
 import (
-	"github.com/paketo-buildpacks/libpak"
-	"github.com/paketo-buildpacks/sbt/sbt"
+	"testing"
+
+	"github.com/sclevine/spec"
+	"github.com/sclevine/spec/report"
 )
 
-func main() {
-	libpak.Detect(sbt.Detect{})
+func TestUnit(t *testing.T) {
+	suite := spec.New("sbt", spec.Report(report.Terminal{}))
+	suite("Application", testApplication)
+	suite("Build", testBuild)
+	suite("Cache", testCache)
+	suite("Detect", testDetect)
+	suite("Distribution", testDistribution)
+	suite.Run(t)
 }
