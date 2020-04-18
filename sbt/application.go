@@ -17,7 +17,6 @@
 package sbt
 
 import (
-	"archive/zip"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -26,7 +25,6 @@ import (
 	"strings"
 
 	"github.com/buildpacks/libcnb"
-	"github.com/magiconair/properties"
 	"github.com/mattn/go-shellwords"
 	"github.com/paketo-buildpacks/libpak"
 	"github.com/paketo-buildpacks/libpak/bard"
@@ -36,8 +34,8 @@ import (
 )
 
 var (
-	DefaultArguments = []string{"package"}
-	DefaultTarget    = filepath.Join("target", "scala-*", "*.jar")
+	DefaultArguments = []string{"universal:packageBin"}
+	DefaultTarget    = filepath.Join("target", "universal", "*.zip")
 )
 
 type Application struct {
@@ -165,75 +163,15 @@ func (a Application) ResolveArtifact() (string, error) {
 	}
 
 	file := filepath.Join(a.ApplicationPath, pattern)
-	candidates, err := filepath.Glob(file)
+	artifacts, err := filepath.Glob(file)
 	if err != nil {
 		return "", fmt.Errorf("unable to find files with %s\n%w", pattern, err)
 	}
 
-	if len(candidates) == 1 {
-		return candidates[0], nil
-	}
-
-	var artifacts []string
-	for _, c := range candidates {
-		ok, err := a.interestingFile(c)
-		if err != nil {
-			return "", fmt.Errorf("unable to investigate %s\n%w", c, err)
-		}
-		if ok {
-			artifacts = append(artifacts, c)
-		}
-	}
-
 	if len(artifacts) != 1 {
 		sort.Strings(artifacts)
-		return "", fmt.Errorf("unable to find built artifact (executable JAR) in %s, candidates: %s", pattern, candidates)
+		return "", fmt.Errorf("unable to find built artifact in %s, candidates: %s", pattern, artifacts)
 	}
 
 	return artifacts[0], nil
 }
-
-func (a Application) interestingEntry(f *zip.File) (bool, error) {
-	if f.Name == "META-INF/MANIFEST.MF" {
-		m, err := f.Open()
-		if err != nil {
-			return false, fmt.Errorf("unable to open %s\n%w", f.Name, err)
-		}
-		defer m.Close()
-
-		b, err := ioutil.ReadAll(m)
-		if err != nil {
-			return false, fmt.Errorf("unable to read %s\n%w", f.Name, err)
-		}
-
-		p, err := properties.Load(b, properties.UTF8)
-		if err != nil {
-			return false, fmt.Errorf("unable to parse properties in %s\n%w", f.Name, err)
-		}
-
-		if _, ok := p.Get("Main-Class"); ok {
-			return true, nil
-		}
-	}
-
-	return false, nil
-}
-
-func (a Application) interestingFile(path string) (bool, error) {
-	z, err := zip.OpenReader(path)
-	if err != nil {
-		return false, fmt.Errorf("unable to open %s\n%w", path, err)
-	}
-	defer z.Close()
-
-	for _, f := range z.File {
-		if i, err := a.interestingEntry(f); err != nil {
-			return false, fmt.Errorf("unable to investigate entry %s/%s\n%w", path, f.Name, err)
-		} else if i {
-			return true, nil
-		}
-	}
-
-	return false, nil
-}
-

@@ -65,10 +65,10 @@ func testApplication(t *testing.T, context spec.G, it spec.S) {
 	})
 
 	it("contributes layer", func() {
-		in, err := os.Open(filepath.Join("testdata", "stub-application.jar"))
+		in, err := os.Open(filepath.Join("testdata", "stub-application.zip"))
 		Expect(err).NotTo(HaveOccurred())
-		Expect(os.MkdirAll(filepath.Join(ctx.Application.Path, "target", "scala-2.13"), 0755)).To(Succeed())
-		out, err := os.OpenFile(filepath.Join(ctx.Application.Path, "target", "scala-2.13", "stub-application.jar"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+		Expect(os.MkdirAll(filepath.Join(ctx.Application.Path, "target", "universal"), 0755)).To(Succeed())
+		out, err := os.OpenFile(filepath.Join(ctx.Application.Path, "target", "universal", "stub-application.zip"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 		Expect(err).NotTo(HaveOccurred())
 		_, err = io.Copy(out, in)
 		Expect(err).NotTo(HaveOccurred())
@@ -88,19 +88,19 @@ func testApplication(t *testing.T, context spec.G, it spec.S) {
 
 		e := executor.Calls[0].Arguments[0].(effect.Execution)
 		Expect(e.Command).To(Equal("test-command"))
-		Expect(e.Args).To(Equal([]string{"package"}))
+		Expect(e.Args).To(Equal([]string{"universal:packageBin"}))
 		Expect(e.Dir).To(Equal(ctx.Application.Path))
 		Expect(e.Stdout).NotTo(BeNil())
 		Expect(e.Stderr).NotTo(BeNil())
 
 		Expect(filepath.Join(layer.Path, "application.zip")).To(BeARegularFile())
-		Expect(filepath.Join(ctx.Application.Path, "stub-application.jar")).NotTo(BeAnExistingFile())
+		Expect(filepath.Join(ctx.Application.Path, "target", "universal", "stub-application.zip")).NotTo(BeAnExistingFile())
 		Expect(filepath.Join(ctx.Application.Path, "fixture-marker")).To(BeARegularFile())
 	})
 
 	context("ResolveArguments", func() {
 		it("uses default arguments", func() {
-			Expect(application.ResolveArguments()).To(Equal([]string{"package"}))
+			Expect(application.ResolveArguments()).To(Equal([]string{"universal:packageBin"}))
 		})
 
 		context("$BP_SBT_BUILD_ARGUMENTS", func() {
@@ -122,17 +122,17 @@ func testApplication(t *testing.T, context spec.G, it spec.S) {
 	context("ResolveArtifact", func() {
 		it("fails with no files", func() {
 			_, err := application.ResolveArtifact()
-			Expect(err).To(MatchError("unable to find built artifact (executable JAR) in target/scala-*/*.jar, candidates: []"))
+			Expect(err).To(MatchError("unable to find built artifact in target/universal/*.zip, candidates: []"))
 		})
 
 		it("fails with multiple candidates", func() {
-			Expect(os.MkdirAll(filepath.Join(ctx.Application.Path, "target", "scala-2.13"), 0755)).To(Succeed())
+			Expect(os.MkdirAll(filepath.Join(ctx.Application.Path, "target", "universal"), 0755)).To(Succeed())
 
-			for _, f := range []string{"stub-application.jar", "stub-executable.jar", "stub-executable-2.jar"} {
-				in, err := os.Open(filepath.Join("testdata", f))
+			for _, f := range []string{"stub-application-1.zip", "stub-application-2.zip", "stub-application-3.zip"} {
+				in, err := os.Open(filepath.Join("testdata", "stub-application.zip"))
 				Expect(err).NotTo(HaveOccurred())
 
-				out, err := os.OpenFile(filepath.Join(ctx.Application.Path, "target", "scala-2.13", f), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+				out, err := os.OpenFile(filepath.Join(ctx.Application.Path, "target", "universal", f), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 				Expect(err).NotTo(HaveOccurred())
 
 				_, err = io.Copy(out, in)
@@ -144,20 +144,20 @@ func testApplication(t *testing.T, context spec.G, it spec.S) {
 
 			_, err := application.ResolveArtifact()
 			Expect(err).To(MatchError(
-				fmt.Sprintf("unable to find built artifact (executable JAR) in target/scala-*/*.jar, candidates: [%s %s %s]",
-					filepath.Join(ctx.Application.Path, "target", "scala-2.13", "stub-application.jar"),
-					filepath.Join(ctx.Application.Path, "target", "scala-2.13", "stub-executable-2.jar"),
-					filepath.Join(ctx.Application.Path, "target", "scala-2.13", "stub-executable.jar"))))
+				fmt.Sprintf("unable to find built artifact in target/universal/*.zip, candidates: [%s %s %s]",
+					filepath.Join(ctx.Application.Path, "target", "universal", "stub-application-1.zip"),
+					filepath.Join(ctx.Application.Path, "target", "universal", "stub-application-2.zip"),
+					filepath.Join(ctx.Application.Path, "target", "universal", "stub-application-3.zip"))))
 
 		})
 
 		it("passes with a single candidate", func() {
-			Expect(os.MkdirAll(filepath.Join(ctx.Application.Path, "target", "scala-2.13"), 0755)).To(Succeed())
+			Expect(os.MkdirAll(filepath.Join(ctx.Application.Path, "target", "universal"), 0755)).To(Succeed())
 
-			in, err := os.Open(filepath.Join("testdata", "stub-application.jar"))
+			in, err := os.Open(filepath.Join("testdata", "stub-application.zip"))
 			Expect(err).NotTo(HaveOccurred())
 
-			out, err := os.OpenFile(filepath.Join(ctx.Application.Path, "target", "scala-2.13", "stub-application.jar"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+			out, err := os.OpenFile(filepath.Join(ctx.Application.Path, "target", "universal", "stub-application.zip"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 			Expect(err).NotTo(HaveOccurred())
 
 			_, err = io.Copy(out, in)
@@ -166,27 +166,7 @@ func testApplication(t *testing.T, context spec.G, it spec.S) {
 			Expect(in.Close()).To(Succeed())
 			Expect(out.Close()).To(Succeed())
 
-			Expect(application.ResolveArtifact()).To(Equal(filepath.Join(ctx.Application.Path, "target", "scala-2.13", "stub-application.jar")))
-		})
-
-		it("passes with a single executable JAR", func() {
-			Expect(os.MkdirAll(filepath.Join(ctx.Application.Path, "target", "scala-2.13"), 0755)).To(Succeed())
-
-			for _, f := range []string{"stub-application.jar", "stub-executable.jar"} {
-				in, err := os.Open(filepath.Join("testdata", f))
-				Expect(err).NotTo(HaveOccurred())
-
-				out, err := os.OpenFile(filepath.Join(ctx.Application.Path, "target", "scala-2.13", f), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
-				Expect(err).NotTo(HaveOccurred())
-
-				_, err = io.Copy(out, in)
-				Expect(err).NotTo(HaveOccurred())
-
-				Expect(in.Close()).To(Succeed())
-				Expect(out.Close()).To(Succeed())
-			}
-
-			Expect(application.ResolveArtifact()).To(Equal(filepath.Join(ctx.Application.Path, "target", "scala-2.13", "stub-executable.jar")))
+			Expect(application.ResolveArtifact()).To(Equal(filepath.Join(ctx.Application.Path, "target", "universal", "stub-application.zip")))
 		})
 
 		context("$BP_SBT_BUILT_MODULE", func() {
@@ -200,12 +180,12 @@ func testApplication(t *testing.T, context spec.G, it spec.S) {
 			})
 
 			it("passes with $BP_SBT_BUILT_MODULE", func() {
-				Expect(os.MkdirAll(filepath.Join(ctx.Application.Path, "test-directory", "target", "scala-2.13"), 0755)).To(Succeed())
+				Expect(os.MkdirAll(filepath.Join(ctx.Application.Path, "test-directory", "target", "universal"), 0755)).To(Succeed())
 
-				in, err := os.Open(filepath.Join("testdata", "stub-application.jar"))
+				in, err := os.Open(filepath.Join("testdata", "stub-application.zip"))
 				Expect(err).NotTo(HaveOccurred())
 
-				out, err := os.OpenFile(filepath.Join(ctx.Application.Path, "test-directory", "target", "scala-2.13", "stub-application.jar"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+				out, err := os.OpenFile(filepath.Join(ctx.Application.Path, "test-directory", "target", "universal", "stub-application.zip"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 				Expect(err).NotTo(HaveOccurred())
 
 				_, err = io.Copy(out, in)
@@ -214,14 +194,14 @@ func testApplication(t *testing.T, context spec.G, it spec.S) {
 				Expect(in.Close()).To(Succeed())
 				Expect(out.Close()).To(Succeed())
 
-				Expect(application.ResolveArtifact()).To(Equal(filepath.Join(ctx.Application.Path, "test-directory", "target", "scala-2.13", "stub-application.jar")))
+				Expect(application.ResolveArtifact()).To(Equal(filepath.Join(ctx.Application.Path, "test-directory", "target", "universal", "stub-application.zip")))
 			})
 
 		})
 
 		context("$BP_SBT_BUILT_ARTIFACT", func() {
 			it.Before(func() {
-				Expect(os.Setenv("BP_SBT_BUILT_ARTIFACT", "test-directory/stub-application.jar")).To(Succeed())
+				Expect(os.Setenv("BP_SBT_BUILT_ARTIFACT", "test-directory/stub-application.zip")).To(Succeed())
 			})
 
 			it.After(func() {
@@ -231,10 +211,10 @@ func testApplication(t *testing.T, context spec.G, it spec.S) {
 			it("passes with BP_SBT_BUILT_ARTIFACT", func() {
 				Expect(os.MkdirAll(filepath.Join(ctx.Application.Path, "test-directory"), 0755)).To(Succeed())
 
-				in, err := os.Open(filepath.Join("testdata", "stub-application.jar"))
+				in, err := os.Open(filepath.Join("testdata", "stub-application.zip"))
 				Expect(err).NotTo(HaveOccurred())
 
-				out, err := os.OpenFile(filepath.Join(ctx.Application.Path, "test-directory", "stub-application.jar"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+				out, err := os.OpenFile(filepath.Join(ctx.Application.Path, "test-directory", "stub-application.zip"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 				Expect(err).NotTo(HaveOccurred())
 
 				_, err = io.Copy(out, in)
@@ -243,7 +223,7 @@ func testApplication(t *testing.T, context spec.G, it spec.S) {
 				Expect(in.Close()).To(Succeed())
 				Expect(out.Close()).To(Succeed())
 
-				Expect(application.ResolveArtifact()).To(Equal(filepath.Join(ctx.Application.Path, "test-directory", "stub-application.jar")))
+				Expect(application.ResolveArtifact()).To(Equal(filepath.Join(ctx.Application.Path, "test-directory", "stub-application.zip")))
 			})
 
 		})
