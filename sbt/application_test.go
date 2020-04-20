@@ -110,7 +110,7 @@ func testApplication(t *testing.T, context spec.G, it spec.S) {
 		Expect(plan).To(Equal(&libcnb.BuildpackPlan{
 			Entries: []libcnb.BuildpackPlanEntry{
 				{
-					Name: "maven",
+					Name: "sbt",
 					Metadata: map[string]interface{}{
 						"dependencies": []libjvm.MavenJAR{
 							{
