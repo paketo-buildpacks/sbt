@@ -26,6 +26,7 @@ import (
 
 	"github.com/buildpacks/libcnb"
 	"github.com/mattn/go-shellwords"
+	"github.com/paketo-buildpacks/libjvm"
 	"github.com/paketo-buildpacks/libpak"
 	"github.com/paketo-buildpacks/libpak/bard"
 	"github.com/paketo-buildpacks/libpak/crush"
@@ -40,13 +41,15 @@ var (
 
 type Application struct {
 	ApplicationPath  string
+	CachePath        string
 	Command          string
 	Executor         effect.Executor
 	LayerContributor libpak.LayerContributor
 	Logger           bard.Logger
+	Plan             *libcnb.BuildpackPlan
 }
 
-func NewApplication(applicationPath string, command string) (Application, error) {
+func NewApplication(applicationPath string, cachePath string, command string, plan *libcnb.BuildpackPlan) (Application, error) {
 	l, err := sherpa.NewFileListing(applicationPath)
 	if err != nil {
 		return Application{}, fmt.Errorf("unable to create file listing for %s\n%w", applicationPath, err)
@@ -55,9 +58,11 @@ func NewApplication(applicationPath string, command string) (Application, error)
 
 	return Application{
 		ApplicationPath:  applicationPath,
+		CachePath:        cachePath,
 		Command:          command,
 		Executor:         effect.NewExecutor(),
 		LayerContributor: libpak.NewLayerContributor("Compiled Application", expected),
+		Plan:             plan,
 	}, nil
 }
 
@@ -107,6 +112,17 @@ func (a Application) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 	})
 	if err != nil {
 		return libcnb.Layer{}, fmt.Errorf("unable to contribute application layer\n%w", err)
+	}
+
+	entry := libcnb.BuildpackPlanEntry{
+		Name:     "sbt",
+		Metadata: map[string]interface{}{},
+	}
+	a.Plan.Entries = append(a.Plan.Entries, entry)
+
+	entry.Metadata["dependencies"], err = libjvm.NewMavenJARListing(a.CachePath)
+	if err != nil {
+		return libcnb.Layer{}, fmt.Errorf("unable to generate dependencies from %s\n%w", a.CachePath, err)
 	}
 
 	a.Logger.Header("Removing source code")
