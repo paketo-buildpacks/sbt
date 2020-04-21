@@ -19,9 +19,11 @@ package sbt
 import (
 	"fmt"
 	"os"
+	"os/user"
 	"path/filepath"
 
 	"github.com/buildpacks/libcnb"
+	"github.com/paketo-buildpacks/libbs"
 	"github.com/paketo-buildpacks/libpak"
 	"github.com/paketo-buildpacks/libpak/bard"
 )
@@ -58,14 +60,20 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 		return libcnb.BuildResult{}, fmt.Errorf("unable to stat %s\n%w", command, err)
 	}
 
-	c, err := NewCache()
+	u, err := user.Current()
 	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to create cache layer\n%w", err)
+		return libcnb.BuildResult{}, fmt.Errorf("unable to determine user home directory\n%w", err)
 	}
+
+	c := libbs.Cache{Path: filepath.Join(u.HomeDir, ".sbt")}
 	c.Logger = b.Logger
 	result.Layers = append(result.Layers, c)
 
-	a, err := NewApplication(context.Application.Path, c.Path, command, result.Plan)
+	arg := libbs.NewArgumentResolver("BP_SBT_BUILD_ARGUMENTS", []string{"universal:packageBin"}, b.Logger)
+
+	art := libbs.NewArtifactResolver("BP_SBT_BUILT_ARTIFACT", "BP_SBT_BUILT_MODULE", filepath.Join("target", "universal", "*.zip"), b.Logger)
+
+	a, err := libbs.NewApplication(context.Application.Path, arg, art, c, command, result.Plan)
 	if err != nil {
 		return libcnb.BuildResult{}, fmt.Errorf("unable to create application layer\n%w", err)
 	}

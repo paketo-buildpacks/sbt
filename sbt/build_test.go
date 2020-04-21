@@ -24,6 +24,7 @@ import (
 
 	"github.com/buildpacks/libcnb"
 	. "github.com/onsi/gomega"
+	"github.com/paketo-buildpacks/libbs"
 	"github.com/paketo-buildpacks/sbt/sbt"
 	"github.com/sclevine/spec"
 )
@@ -60,7 +61,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(result.Layers).To(HaveLen(2))
 		Expect(result.Layers[0].Name()).To(Equal("cache"))
 		Expect(result.Layers[1].Name()).To(Equal("application"))
-		Expect(result.Layers[1].(sbt.Application).Command).To(Equal(filepath.Join(ctx.Application.Path, "sbt")))
+		Expect(result.Layers[1].(libbs.Application).Command).To(Equal(filepath.Join(ctx.Application.Path, "sbt")))
 	})
 
 	it("contributes distribution", func() {
@@ -82,7 +83,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(result.Layers[0].Name()).To(Equal("sbt"))
 		Expect(result.Layers[1].Name()).To(Equal("cache"))
 		Expect(result.Layers[2].Name()).To(Equal("application"))
-		Expect(result.Layers[2].(sbt.Application).Command).To(Equal(filepath.Join(ctx.Layers.Path, "sbt", "bin", "sbt")))
+		Expect(result.Layers[2].(libbs.Application).Command).To(Equal(filepath.Join(ctx.Layers.Path, "sbt", "bin", "sbt")))
 	})
 
 }
