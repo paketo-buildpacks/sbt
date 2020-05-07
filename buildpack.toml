@@ -26,6 +26,20 @@ id = "io.buildpacks.stacks.bionic"
 [[stacks]]
 id = "org.cloudfoundry.stacks.cflinuxfs3"
 
+[[metadata.configurations]]
+name        = "BP_SBT_BUILD_ARGUMENTS"
+description = "the arguments to pass to Maven"
+default     = "universal:packageBin"
+
+[[metadata.configurations]]
+name        = "BP_SBT_BUILT_ARTIFACT"
+description = "the built application artifact explicitly.  Supersedes $BP_SBT_BUILT_MODULE"
+default     = "target/universal/*.zip"
+
+[[metadata.configurations]]
+name        = "BP_SBT_BUILT_MODULE"
+description = "the module to find application artifact in"
+
 [[metadata.dependencies]]
 id      = "sbt"
 name    = "Scala SBT"
