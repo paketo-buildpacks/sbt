@@ -86,7 +86,15 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 		InterestingFileDetector:  libbs.AlwaysInterestingFileDetector{},
 	}
 
-	a, err := libbs.NewApplication(context.Application.Path, args, art, c, command, result.Plan)
+	a, err := libbs.NewApplication(
+		map[string]interface{}{},
+		args,
+		art,
+		c,
+		command,
+		result.Plan,
+		context.Application.Path,
+	)
 	if err != nil {
 		return libcnb.BuildResult{}, fmt.Errorf("unable to create application layer\n%w", err)
 	}
