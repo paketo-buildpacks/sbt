@@ -19,6 +19,7 @@ package main
 import (
 	"os"
 
+	"github.com/paketo-buildpacks/libbs"
 	"github.com/paketo-buildpacks/libpak"
 	"github.com/paketo-buildpacks/libpak/bard"
 	"github.com/paketo-buildpacks/sbt/sbt"
@@ -27,6 +28,9 @@ import (
 func main() {
 	libpak.Main(
 		sbt.Detect{},
-		sbt.Build{Logger: bard.NewLogger(os.Stdout)},
+		sbt.Build{
+			Logger:             bard.NewLogger(os.Stdout),
+			ApplicationFactory: libbs.NewApplicationFactory(),
+		},
 	)
 }
