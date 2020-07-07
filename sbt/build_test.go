@@ -25,8 +25,9 @@ import (
 	"github.com/buildpacks/libcnb"
 	. "github.com/onsi/gomega"
 	"github.com/paketo-buildpacks/libbs"
-	"github.com/paketo-buildpacks/sbt/sbt"
 	"github.com/sclevine/spec"
+
+	"github.com/paketo-buildpacks/sbt/sbt"
 )
 
 func testBuild(t *testing.T, context spec.G, it spec.S) {
