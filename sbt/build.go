@@ -69,7 +69,7 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 		d.Logger = b.Logger
 		result.Layers = append(result.Layers, d)
 
-		command = filepath.Join(context.Layers.Path, "sbt", "bin", "sbt")
+		command = filepath.Join(context.Layers.Path, d.Name(), "bin", "sbt")
 	} else if err != nil {
 		return libcnb.BuildResult{}, fmt.Errorf("unable to stat %s\n%w", command, err)
 	} else {
