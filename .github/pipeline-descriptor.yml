@@ -1,3 +1,5 @@
+github_token: ${{ secrets.JAVA_GITHUB_TOKEN }}
+
 codeowners:
 - path:  "*"
   owner: "@paketo-buildpacks/java-buildpacks"
@@ -19,4 +21,4 @@ dependencies:
     glob:       sbt-.+.tgz
     owner:      sbt
     repository: sbt
-    token:      ${{ secrets.GITHUB_TOKEN }}
+    token:      ${{ secrets.JAVA_GITHUB_TOKEN }}
