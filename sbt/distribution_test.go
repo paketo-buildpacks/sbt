@@ -55,7 +55,7 @@ func testDistribution(t *testing.T, context spec.G, it spec.S) {
 		}
 		dc := libpak.DependencyCache{CachePath: "testdata"}
 
-		d := sbt.NewDistribution(dep, dc, &libcnb.BuildpackPlan{})
+		d, _ := sbt.NewDistribution(dep, dc)
 		layer, err := ctx.Layers.Layer("test-layer")
 		Expect(err).NotTo(HaveOccurred())
 
