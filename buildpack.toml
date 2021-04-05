@@ -50,8 +50,8 @@ build       = true
 id      = "sbt"
 name    = "Scala SBT"
 version = "1.5.0"
-uri     = "https://github.com/sbt/sbt/releases/download/v1.5.0-RC2/sbt-1.5.0-RC2.tgz"
-sha256  = "947cff40b3f0fcbd2f3be594589c5b1e3b81850101178a2d8f5cf989c5b9b289"
+uri     = "https://github.com/sbt/sbt/releases/download/v1.5.0/sbt-1.5.0.tgz"
+sha256  = "aadf110a48ea77c02ce63a9cc033d9fcd02b634e89e8f22dfe13ed21592042b6"
 stacks  = [ "io.buildpacks.stacks.bionic", "io.paketo.stacks.tiny", "org.cloudfoundry.stacks.cflinuxfs3" ]
 
   [[metadata.dependencies.licenses]]
