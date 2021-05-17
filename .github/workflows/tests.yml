@@ -12,7 +12,7 @@ jobs:
         steps:
             - if: ${{ github.event_name != 'pull_request' || ! github.event.pull_request.head.repo.fork }}
               name: Docker login gcr.io
-              uses: docker/login-action@v1.9.0
+              uses: docker/login-action@v1
               with:
                 password: ${{ secrets.JAVA_GCLOUD_SERVICE_ACCOUNT_KEY }}
                 registry: gcr.io
@@ -58,7 +58,7 @@ jobs:
               with:
                 go-version: "1.15"
             - uses: actions/checkout@v2
-            - uses: actions/cache@v2.1.5
+            - uses: actions/cache@v2
               with:
                 key: ${{ runner.os }}-go-${{ hashFiles('**/buildpack.toml', '**/package.toml') }}
                 path: |-
@@ -139,7 +139,7 @@ jobs:
             - ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - uses: actions/cache@v2.1.5
+            - uses: actions/cache@v2
               with:
                 key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
                 path: ${{ env.HOME }}/go/pkg/mod
