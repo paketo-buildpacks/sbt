@@ -33,7 +33,7 @@ id = "io.buildpacks.stacks.bionic"
 id = "io.paketo.stacks.tiny"
 
 [[stacks]]
-id = "org.cloudfoundry.stacks.cflinuxfs3"
+id = "*"
 
 [[metadata.configurations]]
 name        = "BP_SBT_BUILD_ARGUMENTS"
@@ -58,7 +58,7 @@ name    = "Scala SBT"
 version = "1.5.5"
 uri     = "https://github.com/sbt/sbt/releases/download/v1.5.5/sbt-1.5.5.tgz"
 sha256  = "c0fcd50cf5c91ed27ad01c5c6a8717b62700c87a50ff9b0e7573b227acb2b3c9"
-stacks  = [ "io.buildpacks.stacks.bionic", "io.paketo.stacks.tiny", "org.cloudfoundry.stacks.cflinuxfs3" ]
+stacks  = [ "io.buildpacks.stacks.bionic", "io.paketo.stacks.tiny", "*" ]
 
   [[metadata.dependencies.licenses]]
   type = "Apache-2.0"
