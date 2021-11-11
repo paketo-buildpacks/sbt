@@ -22,6 +22,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/paketo-buildpacks/libpak/sbom"
+
 	"github.com/buildpacks/libcnb"
 	. "github.com/onsi/gomega"
 	"github.com/paketo-buildpacks/libbs"
@@ -71,7 +73,32 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(result.Layers[1].(libbs.Application).Command).To(Equal(filepath.Join(ctx.Application.Path, "sbt")))
 	})
 
-	it("contributes distribution", func() {
+	it("contributes distribution for API 0.7+", func() {
+		ctx.Buildpack.Metadata = map[string]interface{}{
+			"dependencies": []map[string]interface{}{
+				{
+					"id":      "sbt",
+					"version": "1.1.1",
+					"stacks":  []interface{}{"test-stack-id"},
+					"cpes":    []string{"cpe:2.3:a:lightbend:sbt:1.5.5:*:*:*:*:*:*:*"},
+					"purl":    "pkg:generic/sbt@1.5.5",
+				},
+			},
+		}
+		ctx.StackID = "test-stack-id"
+
+		result, err := sbtBuild.Build(ctx)
+		Expect(err).NotTo(HaveOccurred())
+
+		Expect(result.Layers).To(HaveLen(3))
+		Expect(result.Layers[0].Name()).To(Equal("sbt"))
+		Expect(result.Layers[1].Name()).To(Equal("cache"))
+		Expect(result.Layers[2].Name()).To(Equal("application"))
+		Expect(result.Layers[2].(libbs.Application).Command).To(Equal(filepath.Join(ctx.Layers.Path, "sbt", "bin", "sbt")))
+
+		Expect(result.BOM.Entries).To(HaveLen(0))
+	})
+	it("contributes distribution for API <=0.6", func() {
 		ctx.Buildpack.Metadata = map[string]interface{}{
 			"dependencies": []map[string]interface{}{
 				{
@@ -82,6 +109,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			},
 		}
 		ctx.StackID = "test-stack-id"
+		ctx.Buildpack.API = "0.6"
 
 		result, err := sbtBuild.Build(ctx)
 		Expect(err).NotTo(HaveOccurred())
@@ -108,6 +136,8 @@ func (f *FakeApplicationFactory) NewApplication(
 	_ libbs.Cache,
 	command string,
 	_ *libcnb.BOM,
+	_ string,
+	_ sbom.SBOMScanner,
 	_ string,
 ) (libbs.Application, error) {
 	return libbs.Application{
