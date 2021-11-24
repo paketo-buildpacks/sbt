@@ -22,6 +22,9 @@ import (
 	"os/user"
 	"path/filepath"
 
+	"github.com/paketo-buildpacks/libpak/effect"
+	"github.com/paketo-buildpacks/libpak/sbom"
+
 	"github.com/buildpacks/libcnb"
 	"github.com/paketo-buildpacks/libbs"
 	"github.com/paketo-buildpacks/libpak"
@@ -35,7 +38,7 @@ type Build struct {
 
 type ApplicationFactory interface {
 	NewApplication(additionalMetadata map[string]interface{}, arguments []string, artifactResolver libbs.ArtifactResolver,
-		cache libbs.Cache, command string, bom *libcnb.BOM, applicationPath string) (libbs.Application, error)
+		cache libbs.Cache, command string, bom *libcnb.BOM, applicationPath string, sbomScanner sbom.SBOMScanner, buildpackAPI string) (libbs.Application, error)
 }
 
 func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
@@ -68,7 +71,9 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 		d, be := NewDistribution(dep, dc)
 		d.Logger = b.Logger
 		result.Layers = append(result.Layers, d)
-		result.BOM.Entries = append(result.BOM.Entries, be)
+		if be.Name != "" {
+			result.BOM.Entries = append(result.BOM.Entries, be)
+		}
 
 		command = filepath.Join(context.Layers.Path, d.Name(), "bin", "sbt")
 	} else if err != nil {
@@ -100,6 +105,8 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 		InterestingFileDetector:  libbs.AlwaysInterestingFileDetector{},
 	}
 
+	sbomScanner := sbom.NewSyftCLISBOMScanner(context.Layers, effect.NewExecutor(), b.Logger)
+
 	a, err := b.ApplicationFactory.NewApplication(
 		map[string]interface{}{},
 		args,
@@ -108,6 +115,8 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 		command,
 		result.BOM,
 		context.Application.Path,
+		sbomScanner,
+		context.Buildpack.API,
 	)
 	if err != nil {
 		return libcnb.BuildResult{}, fmt.Errorf("unable to create application layer\n%w", err)
