@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-api = "0.6"
+api = "0.7"
 
 [buildpack]
   description = "A Cloud Native Buildpack that builds SBT-based applications from source"
@@ -21,6 +21,7 @@ api = "0.6"
   keywords = ["java", "sbt", "scala", "build-system"]
   name = "Paketo SBT Buildpack"
   version = "{{.version}}"
+  sbom-formats = ["application/vnd.cyclonedx+json", "application/vnd.syft+json"]
 
   [[buildpack.licenses]]
     type = "Apache-2.0"
@@ -54,6 +55,10 @@ api = "0.6"
     stacks = ["io.buildpacks.stacks.bionic", "io.paketo.stacks.tiny", "*"]
     uri = "https://github.com/sbt/sbt/releases/download/v1.5.5/sbt-1.5.5.tgz"
     version = "1.5.5"
+    purl = "pkg:generic/sbt@1.5.5"
+    cpes = [
+      "cpe:2.3:a:lightbend:sbt:1.5.5:*:*:*:*:*:*:*"
+    ]
 
     [[metadata.dependencies.licenses]]
       type = "Apache-2.0"
