@@ -20,8 +20,8 @@ api = "0.7"
   id = "paketo-buildpacks/sbt"
   keywords = ["java", "sbt", "scala", "build-system"]
   name = "Paketo SBT Buildpack"
-  version = "{{.version}}"
   sbom-formats = ["application/vnd.cyclonedx+json", "application/vnd.syft+json"]
+  version = "{{.version}}"
 
   [[buildpack.licenses]]
     type = "Apache-2.0"
@@ -49,16 +49,14 @@ api = "0.7"
     name = "BP_SBT_BUILT_MODULE"
 
   [[metadata.dependencies]]
+    cpes = ["cpe:2.3:a:lightbend:sbt:1.5.5:*:*:*:*:*:*:*"]
     id = "sbt"
     name = "Scala SBT"
+    purl = "pkg:generic/sbt@1.5.5"
     sha256 = "c0fcd50cf5c91ed27ad01c5c6a8717b62700c87a50ff9b0e7573b227acb2b3c9"
     stacks = ["io.buildpacks.stacks.bionic", "io.paketo.stacks.tiny", "*"]
     uri = "https://github.com/sbt/sbt/releases/download/v1.5.5/sbt-1.5.5.tgz"
     version = "1.5.5"
-    purl = "pkg:generic/sbt@1.5.5"
-    cpes = [
-      "cpe:2.3:a:lightbend:sbt:1.5.5:*:*:*:*:*:*:*"
-    ]
 
     [[metadata.dependencies.licenses]]
       type = "Apache-2.0"
