@@ -49,14 +49,14 @@ api = "0.7"
     name = "BP_SBT_BUILT_MODULE"
 
   [[metadata.dependencies]]
-    cpes = ["cpe:2.3:a:lightbend:sbt:1.5.8:*:*:*:*:*:*:*"]
+    cpes = ["cpe:2.3:a:lightbend:sbt:1.6.1:*:*:*:*:*:*:*"]
     id = "sbt"
     name = "Scala SBT"
-    purl = "pkg:generic/sbt@1.5.8"
-    sha256 = "5a74f752b7dc200b3b1d1c515327f01c21fef833e95738de42c242fb7840d489"
+    purl = "pkg:generic/sbt@1.6.1"
+    sha256 = "60286bf1b875b31e2955f8a699888cd2612e9afd94d03cde0a2e71efd7492ffc"
     stacks = ["io.buildpacks.stacks.bionic", "io.paketo.stacks.tiny", "*"]
-    uri = "https://github.com/sbt/sbt/releases/download/v1.5.8/sbt-1.5.8.tgz"
-    version = "1.5.8"
+    uri = "https://github.com/sbt/sbt/releases/download/v1.6.1/sbt-1.6.1.tgz"
+    version = "1.6.1"
 
     [[metadata.dependencies.licenses]]
       type = "Apache-2.0"
