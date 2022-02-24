@@ -23,7 +23,7 @@ import (
 	"github.com/paketo-buildpacks/libpak"
 	"github.com/paketo-buildpacks/libpak/bard"
 
-	"github.com/paketo-buildpacks/sbt/sbt"
+	"github.com/paketo-buildpacks/sbt/v6/sbt"
 )
 
 func main() {
