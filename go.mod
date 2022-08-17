@@ -1,6 +1,6 @@
 module github.com/paketo-buildpacks/sbt/v6
 
-go 1.17
+go 1.18
 
 require (
 	github.com/buildpacks/libcnb v1.26.0
@@ -24,7 +24,6 @@ require (
 	github.com/mattn/go-shellwords v1.0.12 // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2 // indirect
 	github.com/paketo-buildpacks/libjvm v1.39.0 // indirect
-	github.com/pavel-v-chernykh/keystore-go/v4 v4.3.0 // indirect
 	github.com/pavlo-v-chernykh/keystore-go/v4 v4.4.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
