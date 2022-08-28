@@ -56,6 +56,48 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(os.RemoveAll(ctx.Layers.Path)).To(Succeed())
 	})
 
+	context("BP_SBT_REPOSITORIES_FILE configuration is set", func() {
+		it.Before(func() {
+			ctx.Buildpack.Metadata = map[string]interface{}{
+				"configurations": []map[string]interface{}{
+					{"name": "BP_SBT_REPOSITORIES_FILE", "default": "/workspace/repositories"},
+				},
+			}
+		})
+
+		it("sets the settings path", func() {
+			Expect(ioutil.WriteFile(filepath.Join(ctx.Application.Path, "sbt"), []byte{}, 0644)).To(Succeed())
+			ctx.StackID = "test-stack-id"
+
+			result, err := sbtBuild.Build(ctx)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(result.Layers[1].(libbs.Application).Arguments).To(Equal([]string{
+				"-Dsbt.repository.config=/workspace/repositories",
+				"-Dsbt.override.build.repos=true",
+			}))
+		})
+	})
+
+	context("BP_SBT_REPOSITORIES_FILE env var is set", func() {
+		it.Before(func() {
+			t.Setenv("BP_SBT_REPOSITORIES_FILE", "/workspace/repositories")
+		})
+
+		it("sets the settings path", func() {
+			Expect(ioutil.WriteFile(filepath.Join(ctx.Application.Path, "sbt"), []byte{}, 0644)).To(Succeed())
+			ctx.StackID = "test-stack-id"
+
+			result, err := sbtBuild.Build(ctx)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(result.Layers[1].(libbs.Application).Arguments).To(Equal([]string{
+				"-Dsbt.repository.config=/workspace/repositories",
+				"-Dsbt.override.build.repos=true",
+			}))
+		})
+	})
+
 	it("does not contribute distribution if wrapper exists", func() {
 		Expect(ioutil.WriteFile(filepath.Join(ctx.Application.Path, "sbt"), []byte{}, 0644)).To(Succeed())
 		ctx.StackID = "test-stack-id"
@@ -133,7 +175,7 @@ type FakeApplicationFactory struct{}
 
 func (f *FakeApplicationFactory) NewApplication(
 	_ map[string]interface{},
-	_ []string,
+	args []string,
 	_ libbs.ArtifactResolver,
 	_ libbs.Cache,
 	command string,
@@ -142,6 +184,7 @@ func (f *FakeApplicationFactory) NewApplication(
 	_ sbom.SBOMScanner,
 ) (libbs.Application, error) {
 	return libbs.Application{
-		Command: command,
+		Command:   command,
+		Arguments: args,
 	}, nil
 }

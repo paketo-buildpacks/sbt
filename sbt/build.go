@@ -96,6 +96,10 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 		return libcnb.BuildResult{}, fmt.Errorf("unable to resolve build arguments\n%w", err)
 	}
 
+	if path, _ := cr.Resolve("BP_SBT_REPOSITORIES_FILE"); path != "" {
+		args = append([]string{fmt.Sprintf("-Dsbt.repository.config=%s", path), "-Dsbt.override.build.repos=true"}, args...)
+	}
+
 	art := libbs.ArtifactResolver{
 		ArtifactConfigurationKey: "BP_SBT_BUILT_ARTIFACT",
 		ConfigurationResolver:    cr,
