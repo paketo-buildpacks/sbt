@@ -50,7 +50,7 @@ api = "0.7"
 
   [[metadata.configurations]]
     build = true
-    description = "the path to the sbt repositories file"
+    description = "the path to the SBT repositories file"
     name = "BP_SBT_REPOSITORIES_FILE"
 
   [[metadata.dependencies]]
