@@ -30,7 +30,7 @@ The buildpack will do the following:
 | `$BP_SBT_BUILD_ARGUMENTS` | Configure the arguments to pass to build system. Defaults to `universal:packageBin`.                                                                                                                                               |
 | `$BP_SBT_BUILT_MODULE`    | Configure the module to find application artifact in. Defaults to the root module (empty).                                                                                                                                         |
 | `$BP_SBT_BUILT_ARTIFACT`  | Configure the built application artifact explicitly. Supersedes `$BP_SBT_BUILT_MODULE`. Defaults to `target/universal/*.zip`. Can match a single file, multiple files or a directory. Can be one or more space separated patterns. |
-
+| `$BP_SBT_REPOSITORIES_FILE` | Specifies a custom location to SBT's `repositories` file. |
 ## Bindings
 
 The buildpack optionally accepts the following bindings:
@@ -46,4 +46,3 @@ The buildpack optionally accepts the following bindings:
 This buildpack is released under version 2.0 of the [Apache License][a].
 
 [a]: http://www.apache.org/licenses/LICENSE-2.0
-

@@ -48,6 +48,11 @@ api = "0.7"
     description = "the module to find application artifact in"
     name = "BP_SBT_BUILT_MODULE"
 
+  [[metadata.configurations]]
+    build = true
+    description = "the path to the SBT repositories file"
+    name = "BP_SBT_REPOSITORIES_FILE"
+
   [[metadata.dependencies]]
     cpes = ["cpe:2.3:a:lightbend:sbt:1.7.1:*:*:*:*:*:*:*"]
     id = "sbt"
