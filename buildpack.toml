@@ -19,7 +19,7 @@ api = "0.7"
   homepage = "https://github.com/paketo-buildpacks/sbt"
   id = "paketo-buildpacks/sbt"
   keywords = ["java", "sbt", "scala", "build-system"]
-  name = "Paketo SBT Buildpack"
+  name = "Paketo Buildpack for SBT"
   sbom-formats = ["application/vnd.cyclonedx+json", "application/vnd.syft+json"]
   version = "{{.version}}"
 
