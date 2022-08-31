@@ -1,6 +1,6 @@
 # `gcr.io/paketo-buildpacks/sbt`
 
-The Paketo SBT Buildpack is a Cloud Native Buildpack that builds SBT-based applications from source.
+The Paketo Buildpack for SBT is a Cloud Native Buildpack that builds SBT-based applications from source.
 
 ## Behavior
 
