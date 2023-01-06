@@ -66,14 +66,14 @@ api = "0.7"
     name = "BP_EXCLUDE_FILES"
 
   [[metadata.dependencies]]
-    cpes = ["cpe:2.3:a:lightbend:sbt:1.8.1:*:*:*:*:*:*:*"]
+    cpes = ["cpe:2.3:a:lightbend:sbt:1.8.2:*:*:*:*:*:*:*"]
     id = "sbt"
     name = "Scala SBT"
-    purl = "pkg:generic/sbt@1.8.1"
-    sha256 = "47741c891e85cd6ff592cdfd61077d4e0704ad57779310662495bfb7da38b699"
+    purl = "pkg:generic/sbt@1.8.2"
+    sha256 = "1f65344da074dbd66dfefa93c0eff8d319d772e5cad47fcbeb6ae178bbdf4686"
     stacks = ["io.buildpacks.stacks.bionic", "io.paketo.stacks.tiny", "*"]
-    uri = "https://github.com/sbt/sbt/releases/download/v1.8.1/sbt-1.8.1.tgz"
-    version = "1.8.1"
+    uri = "https://github.com/sbt/sbt/releases/download/v1.8.2/sbt-1.8.2.tgz"
+    version = "1.8.2"
 
     [[metadata.dependencies.licenses]]
       type = "Apache-2.0"
