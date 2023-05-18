@@ -48,11 +48,11 @@ func testDetect(t *testing.T, context spec.G, it spec.S) {
 		Expect(os.RemoveAll(ctx.Application.Path)).To(Succeed())
 	})
 
-	it("fails without pom.xml", func() {
+	it("fails without build.sbt", func() {
 		Expect(detect.Detect(ctx)).To(Equal(libcnb.DetectResult{}))
 	})
 
-	it("passes with pom.xml", func() {
+	it("passes with build.sbt", func() {
 		Expect(ioutil.WriteFile(filepath.Join(ctx.Application.Path, "build.sbt"), []byte{}, 0644))
 
 		Expect(detect.Detect(ctx)).To(Equal(libcnb.DetectResult{
