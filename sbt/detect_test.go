@@ -17,7 +17,6 @@
 package sbt_test
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -40,7 +39,7 @@ func testDetect(t *testing.T, context spec.G, it spec.S) {
 	it.Before(func() {
 		var err error
 
-		ctx.Application.Path, err = ioutil.TempDir("", "sbt")
+		ctx.Application.Path, err = os.MkdirTemp("", "sbt")
 		Expect(err).NotTo(HaveOccurred())
 	})
 
@@ -53,7 +52,7 @@ func testDetect(t *testing.T, context spec.G, it spec.S) {
 	})
 
 	it("passes with build.sbt", func() {
-		Expect(ioutil.WriteFile(filepath.Join(ctx.Application.Path, "build.sbt"), []byte{}, 0644))
+		Expect(os.WriteFile(filepath.Join(ctx.Application.Path, "build.sbt"), []byte{}, 0644))
 
 		Expect(detect.Detect(ctx)).To(Equal(libcnb.DetectResult{
 			Pass: true,

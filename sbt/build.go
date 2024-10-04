@@ -107,7 +107,7 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 		InterestingFileDetector:  libbs.AlwaysInterestingFileDetector{},
 	}
 
-	sbomScanner := sbom.NewSyftCLISBOMScanner(context.Layers, effect.NewExecutor(), b.Logger)
+	sbomScanner := sbom.NewSyftCLISBOMScanner(context.Layers, effect.CommandExecutor{}, b.Logger)
 
 	a, err := b.ApplicationFactory.NewApplication(
 		map[string]interface{}{},
