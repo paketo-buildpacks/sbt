@@ -1,4 +1,7 @@
-# `gcr.io/paketo-buildpacks/sbt`
+# Paketo Buildpack for Encrypt at Rest
+
+## Buildpack ID: `paketo-buildpacks/sbt`
+## Registry URLs: `docker.io/paketobuildpacks/sbt`
 
 The Paketo Buildpack for SBT is a Cloud Native Buildpack that builds SBT-based applications from source.
 
