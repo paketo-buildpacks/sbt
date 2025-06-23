@@ -1,8 +1,6 @@
 module github.com/paketo-buildpacks/sbt/v6
 
-go 1.24.3
-
-toolchain go1.24.4
+go 1.24.4
 
 require (
 	github.com/buildpacks/libcnb v1.30.4
@@ -26,7 +24,7 @@ require (
 	github.com/mattn/go-shellwords v1.0.12 // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2 // indirect
 	github.com/paketo-buildpacks/libjvm v1.46.0 // indirect
-	github.com/paketo-buildpacks/source-removal v0.2.47 // indirect
+	github.com/paketo-buildpacks/source-removal v0.2.49 // indirect
 	github.com/pavlo-v-chernykh/keystore-go/v4 v4.5.0 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	golang.org/x/crypto v0.39.0 // indirect
