@@ -66,16 +66,16 @@ api = "0.7"
     name = "BP_EXCLUDE_FILES"
 
   [[metadata.dependencies]]
-    cpes = ["cpe:2.3:a:lightbend:sbt:1.12.6:*:*:*:*:*:*:*"]
+    cpes = ["cpe:2.3:a:lightbend:sbt:1.12.8:*:*:*:*:*:*:*"]
     id = "sbt"
     name = "Scala SBT"
-    purl = "pkg:generic/sbt@1.12.6"
-    sha256 = "c546b0591039017adde7f340e8ef9f86b9152ee90cfabb29850b8284d1c820af"
-    source = "https://github.com/sbt/sbt/archive/refs/tags/v1.12.6.tar.gz"
-    source-sha256 = "f904ab4dad178d8bd6d322aa62a426f816eced5e7bae0696e2d36b2618097b5b"
+    purl = "pkg:generic/sbt@1.12.8"
+    sha256 = "3c655b217a4c925372cf1975e8beff81995589a2d07efae870e8cc32573de1a6"
+    source = "https://github.com/sbt/sbt/archive/refs/tags/v1.12.8.tar.gz"
+    source-sha256 = "0c24470d338775126c6b3d6ed4ff9f3604cab31e1bfe7db3997bfd2b96286cbf"
     stacks = ["io.buildpacks.stacks.bionic", "io.paketo.stacks.tiny", "*"]
-    uri = "https://github.com/sbt/sbt/releases/download/v1.12.6/sbt-1.12.6.tgz"
-    version = "1.12.6"
+    uri = "https://github.com/sbt/sbt/releases/download/v1.12.8/sbt-1.12.8.tgz"
+    version = "1.12.8"
 
     [[metadata.dependencies.licenses]]
       type = "Apache-2.0"
