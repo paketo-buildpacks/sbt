@@ -50,7 +50,7 @@ api = "0.7"
 
   [[metadata.configurations]]
     build = true
-    default = "1.x"
+    default = "1"
     description = "the version of SBT to install"
     name = "BP_SBT_VERSION"
 

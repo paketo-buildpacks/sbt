@@ -175,7 +175,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		it.Before(func() {
 			ctx.Buildpack.Metadata = map[string]interface{}{
 				"configurations": []map[string]interface{}{
-					{"name": "BP_SBT_VERSION", "default": "1.x"},
+					{"name": "BP_SBT_VERSION", "default": "1"},
 				},
 				"dependencies": []map[string]interface{}{
 					{

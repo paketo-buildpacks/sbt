@@ -34,7 +34,7 @@ The buildpack will do the following:
 | `$BP_SBT_BUILT_MODULE`    | Configure the module to find application artifact in. Defaults to the root module (empty).                                                                                                                                         |
 | `$BP_SBT_BUILT_ARTIFACT`  | Configure the built application artifact explicitly. Supersedes `$BP_SBT_BUILT_MODULE`. Defaults to `target/universal/*.zip`. Can match a single file, multiple files or a directory. Can be one or more space separated patterns. |
 | `$BP_SBT_REPOSITORIES_FILE` | Specifies a custom location to SBT's `repositories` file. |
-| `$BP_SBT_VERSION`           | The version of SBT to install. Defaults to `1.x`. |
+| `$BP_SBT_VERSION`           | The version of SBT to install. Defaults to `1`. |
 | `$BP_INCLUDE_FILES`         | Colon separated list of glob patterns to match source files. Any matched file will be retained in the final image. Defaults to `` (i.e. nothing).                                                                                               |
 | `$BP_EXCLUDE_FILES`         | Colon separated list of glob patterns to match source files. Any matched file will be specifically removed from the final image. If include patterns are also specified, then they are applied first and exclude patterns can be used to further reduce the fileset. |
 
