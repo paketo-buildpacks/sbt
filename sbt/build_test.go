@@ -170,6 +170,51 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(result.BOM.Entries[0].Build).To(BeTrue())
 		Expect(result.BOM.Entries[0].Launch).To(BeFalse())
 	})
+
+	context("BP_SBT_VERSION configuration is set", func() {
+		it.Before(func() {
+			ctx.Buildpack.Metadata = map[string]interface{}{
+				"configurations": []map[string]interface{}{
+					{"name": "BP_SBT_VERSION", "default": "1.x"},
+				},
+				"dependencies": []map[string]interface{}{
+					{
+						"id":      "sbt",
+						"version": "1.1.1",
+						"stacks":  []interface{}{"test-stack-id"},
+					},
+					{
+						"id":      "sbt",
+						"version": "2.0.0",
+						"stacks":  []interface{}{"test-stack-id"},
+					},
+				},
+			}
+			ctx.StackID = "test-stack-id"
+		})
+
+		it("resolves the 1.x line by default", func() {
+			result, err := sbtBuild.Build(ctx)
+			Expect(err).NotTo(HaveOccurred())
+
+			dist := result.Layers[0].(sbt.Distribution)
+			Expect(dist.LayerContributor.Dependency.Version).To(Equal("1.1.1"))
+		})
+
+		context("BP_SBT_VERSION env var is set", func() {
+			it.Before(func() {
+				t.Setenv("BP_SBT_VERSION", "2.0.0")
+			})
+
+			it("resolves the requested version", func() {
+				result, err := sbtBuild.Build(ctx)
+				Expect(err).NotTo(HaveOccurred())
+
+				dist := result.Layers[0].(sbt.Distribution)
+				Expect(dist.LayerContributor.Dependency.Version).To(Equal("2.0.0"))
+			})
+		})
+	})
 }
 
 type FakeApplicationFactory struct{}
