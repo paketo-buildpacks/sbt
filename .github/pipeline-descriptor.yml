@@ -17,10 +17,23 @@ docker_credentials:
   password: ${{ secrets.PAKETO_BUILDPACKS_DOCKERHUB_PASSWORD }}
 
 dependencies:
-- id:   sbt
-  uses: docker://ghcr.io/paketo-buildpacks/actions/github-release-dependency:main
+- name:            SBT 1
+  id:              sbt
+  uses:            docker://ghcr.io/paketo-buildpacks/actions/github-release-dependency:main
+  version_pattern: "^1\\.[\\d]+\\.[\\d]+"
   with:
     glob:       sbt-.+.tgz
     owner:      sbt
     repository: sbt
+    tag_filter: "^v?(1\\.[\\d]+\\.[\\d]+)$"
+    token:      ${{ secrets.PAKETO_BOT_GITHUB_TOKEN }}
+- name:            SBT 2
+  id:              sbt
+  uses:            docker://ghcr.io/paketo-buildpacks/actions/github-release-dependency:main
+  version_pattern: "^2\\.[\\d]+\\.[\\d]+"
+  with:
+    glob:       sbt-.+.tgz
+    owner:      sbt
+    repository: sbt
+    tag_filter: "^v?(2\\.[\\d]+\\.[\\d]+)$"
     token:      ${{ secrets.PAKETO_BOT_GITHUB_TOKEN }}

@@ -63,7 +63,8 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 
 	command := filepath.Join(context.Application.Path, "sbt")
 	if _, err := os.Stat(command); os.IsNotExist(err) {
-		dep, err := dr.Resolve("sbt", "")
+		version, _ := cr.Resolve("BP_SBT_VERSION")
+		dep, err := dr.Resolve("sbt", version)
 		if err != nil {
 			return libcnb.BuildResult{}, fmt.Errorf("unable to find dependency\n%w", err)
 		}

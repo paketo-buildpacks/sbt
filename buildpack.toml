@@ -50,6 +50,12 @@ api = "0.7"
 
   [[metadata.configurations]]
     build = true
+    default = "1"
+    description = "the version of SBT to install"
+    name = "BP_SBT_VERSION"
+
+  [[metadata.configurations]]
+    build = true
     description = "the path to the SBT repositories file"
     name = "BP_SBT_REPOSITORIES_FILE"
 
@@ -76,6 +82,22 @@ api = "0.7"
     stacks = ["io.buildpacks.stacks.bionic", "io.paketo.stacks.tiny", "*"]
     uri = "https://github.com/sbt/sbt/releases/download/v1.12.11/sbt-1.12.11.tgz"
     version = "1.12.11"
+
+    [[metadata.dependencies.licenses]]
+      type = "Apache-2.0"
+      uri = "https://github.com/sbt/sbt/blob/develop/LICENSE"
+
+  [[metadata.dependencies]]
+    cpes = ["cpe:2.3:a:lightbend:sbt:2.0.6:*:*:*:*:*:*:*"]
+    id = "sbt"
+    name = "Scala SBT"
+    purl = "pkg:generic/sbt@2.0.6"
+    sha256 = "60ce78a50b726b5b332a5277e363d67c028f16a3a15157f78a416c0b2949bc6d"
+    source = "https://github.com/sbt/sbt/archive/refs/tags/v2.0.6.tar.gz"
+    source-sha256 = "84813565df096511aeb2ab46096df3322c4c4075622d4d741a89e004a8664b0c"
+    stacks = ["io.buildpacks.stacks.bionic", "io.paketo.stacks.tiny", "*"]
+    uri = "https://github.com/sbt/sbt/releases/download/v2.0.6/sbt-2.0.6.tgz"
+    version = "2.0.6"
 
     [[metadata.dependencies.licenses]]
       type = "Apache-2.0"
