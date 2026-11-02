@@ -76,12 +76,12 @@ api = "0.7"
     id = "sbt"
     name = "Scala SBT"
     purl = "pkg:generic/sbt@1.12.11"
-    sha256 = "06806805ffd26232727326216766ed4793b549f8c1e6ffeef2e610db7245b698"
-    source = "https://github.com/sbt/sbt/archive/refs/tags/v1.13.0.tar.gz"
-    source-sha256 = "8d9e34e9f7e3c811e3151d2dd0972a540880878f29a90858b5cf485fcfd5d52b"
+    sha256 = "4a20e36c1642b6d5be34ef641d2ed6c8c0d464e6145283730d5566716e4083be"
+    source = "https://github.com/sbt/sbt/archive/refs/tags/v1.13.1.tar.gz"
+    source-sha256 = "fc9a2cf671a8eb7e63e3ceffb9b3bb83273ca6b519464870a6e48415e8f3cc12"
     stacks = ["io.buildpacks.stacks.bionic", "io.paketo.stacks.tiny", "*"]
-    uri = "https://github.com/sbt/sbt/releases/download/v1.13.0/sbt-1.13.0.tgz"
-    version = "1.13.0"
+    uri = "https://github.com/sbt/sbt/releases/download/v1.13.1/sbt-1.13.1.tgz"
+    version = "1.13.1"
 
     [[metadata.dependencies.licenses]]
       type = "Apache-2.0"
